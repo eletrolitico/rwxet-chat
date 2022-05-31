@@ -8,8 +8,7 @@ namespace rwxet_ui
         EVT_MENU(wxID_ABOUT, Frame::OnAbout)
     wxEND_EVENT_TABLE()
 
-    Frame::Frame(const wxString &title, const wxPoint &pos, const wxSize &size)
-        : wxFrame(NULL, wxID_ANY, title, pos, size)
+    Frame::Frame() : wxFrame(NULL, wxID_ANY, "Rwxet Chat", wxPoint(50, 50), wxSize(450, 340))
     {
         wxMenu *menuFile = new wxMenu;
         menuFile->Append(ID_Hello, "&Hello...\tCtrl-H", "Help string shown in status bar for this menu item");
@@ -29,8 +28,6 @@ namespace rwxet_ui
         SetMenuBar(menuBar);
 
         CreateStatusBar();
-
-        SetStatusText("Welcome to wxWidgets!");
     }
 
     void Frame::OnExit(wxCommandEvent &event)
@@ -40,7 +37,7 @@ namespace rwxet_ui
 
     void Frame::OnAbout(wxCommandEvent &event)
     {
-        wxMessageBox("This is a wxWidgets' Hello world sample", "About Hello World", wxOK | wxICON_INFORMATION);
+        wxMessageBox("This is a Rocket Chat client", "About Rwxet Chat", wxOK | wxICON_INFORMATION);
     }
 
     void Frame::OnHello(wxCommandEvent &event)

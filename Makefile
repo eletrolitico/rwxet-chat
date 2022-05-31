@@ -43,6 +43,5 @@ binFolder:
 
 clean:
 	@ $(RM) ./objects ./bin *~
-	@ rmdir objects bin
 
 .PHONY: all clean

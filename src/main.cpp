@@ -6,6 +6,7 @@
 #endif
 
 #include "ui/frame.h"
+#include "net/ctrl.h"
 
 class MyApp : public wxApp
 {
@@ -17,7 +18,11 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-    rwxet_ui::Frame *frame = new rwxet_ui::Frame("Hello World", wxPoint(50, 50), wxSize(450, 340));
+    if(!rwxet_net::check_user_cfg()){
+        return false;
+    }
+
+    rwxet_ui::Frame *frame = new rwxet_ui::Frame;
     frame->Show(true);
     return true;
 }

@@ -5,42 +5,47 @@
 namespace rwxet_ui
 {
     wxBEGIN_EVENT_TABLE(Login, wxPanel)
-        EVT_BUTTON(ID_LoginBtn,Login::OnLogin)
+        EVT_BUTTON(ID_LoginBtn, Login::OnLogin)
     wxEND_EVENT_TABLE()
 
     Login::Login(wxWindow *parent):wxPanel(parent)
     {
-        wxBoxSizer *topSizer = new wxBoxSizer(wxHORIZONTAL);
+        constexpr int width = 400;
+        wxSize inputSize = wxDefaultSize;
+        inputSize.SetWidth(400);
+
         wxBoxSizer *boxSizer = new wxBoxSizer(wxVERTICAL);
 
         wxStaticText *txt = new wxStaticText(this, wxID_ANY, wxString::FromUTF8("Digite as informações para fazer login"));
-        m_server   = new wxTextCtrl(this, wxID_ANY, "rocket-chat.alpha.com.vc", wxDefaultPosition, {400,40});
-        m_username = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, {400,40});
-        m_password = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, {400,40}, wxTE_PASSWORD);
+        m_server   = new wxTextCtrl(this, wxID_ANY, "rocket-chat.alpha.com.vc", wxDefaultPosition, inputSize);
+        m_username = new wxTextCtrl(this, wxID_ANY, "",                         wxDefaultPosition, inputSize);
+        m_password = new wxTextCtrl(this, wxID_ANY, "",                         wxDefaultPosition, inputSize, wxTE_PASSWORD);
 
-        m_server->SetHint("URL do servidor");
-        m_username->SetHint(wxString::FromUTF8("Usuário"));
-        m_password->SetHint("Senha");
+        wxStaticText *serverLabel = new wxStaticText(this, wxID_ANY, "Servidor", wxDefaultPosition, wxSize(width,20));
+        wxStaticText *userLabel   = new wxStaticText(this, wxID_ANY, wxString::FromUTF8("Usuário"), wxDefaultPosition, wxSize(width,20));
+        wxStaticText *passLabel   = new wxStaticText(this, wxID_ANY, "Senha", wxDefaultPosition, wxSize(width,20));
 
         wxButton *btn = new wxButton(this, ID_LoginBtn, "Login");
 
+        boxSizer->AddStretchSpacer();
         boxSizer->Add(txt,        0, wxCENTER);
         boxSizer->AddSpacer(10);
 
-        boxSizer->Add(m_server,   0, wxCENTER);
-        boxSizer->AddSpacer(10);
+        boxSizer->Add(serverLabel, 0, wxCENTER);
+        boxSizer->Add(m_server,    0, wxCENTER);
+        boxSizer->AddSpacer(15);
 
+        boxSizer->Add(userLabel,  0, wxCENTER);
         boxSizer->Add(m_username, 0, wxCENTER);
+        boxSizer->AddSpacer(5);
+        boxSizer->Add(passLabel,  0, wxCENTER);
         boxSizer->Add(m_password, 0, wxCENTER);
         boxSizer->AddSpacer(10);
 
         boxSizer->Add(btn,        0, wxCENTER);
+        boxSizer->AddStretchSpacer();
 
-        boxSizer->SetDimension({0,0}, {400,300});
-
-        topSizer->Add(boxSizer, 1, wxALIGN_CENTER_VERTICAL|wxALL);
-
-        SetSizerAndFit(topSizer);
+        SetSizerAndFit(boxSizer);
     }
 
     void Login::OnLogin(wxCommandEvent &evt){

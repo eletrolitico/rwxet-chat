@@ -9,7 +9,7 @@ namespace rwxet_ui
     class Frame : public wxFrame
     {
     public:
-        Frame(const wxString &title, const wxPoint &pos, const wxSize &size);
+        Frame();
 
     private:
         void OnHello(wxCommandEvent &event);

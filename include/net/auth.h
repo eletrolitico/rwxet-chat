@@ -6,7 +6,7 @@
 namespace rwxet_net
 {
     std::string login(const std::string &server,const std::string &user,const std::string &pass);
-} // namespace rwxet_web
+} // namespace rwxet_net
 
 
 #endif
