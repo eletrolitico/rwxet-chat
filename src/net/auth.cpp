@@ -1,5 +1,9 @@
 #include "net/auth.h"
+
+#include <iostream>
+
 #include "simple_web/client_https.h"
+#include "ctrl/cfg.h"
 
 namespace rwxet_net
 {
@@ -13,8 +17,11 @@ namespace rwxet_net
         headers["Content-type"] = "application/json";
         auto r1 = client.request("POST", "/api/v1/login","{\"user\": \""+user+"\", \"password\": \""+pass+"\"}",headers);
 
-        std::stringstream resp;
-        resp << r1->content.rdbuf();
-        return resp.str();
+        std::stringstream buffer;
+        buffer << r1->content.rdbuf();
+        std::string str = buffer.str();
+
+        auto cfg = rwxet_ctrl::Cfg::Get();
+        return cfg->ParseAuth(std::move(str));
     }
 } // namespace rwxet_net

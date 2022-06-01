@@ -10,11 +10,11 @@ OBJ=$(subst src,objects,$(subst .cpp,.o, $(SOURCES)))
 DIRS=$(dir $(OBJ))
 
 # Compiler and linker
-CC=g++
+CC=$(shell $(WX_CFG_PATH) --cxx)
 
 # Flags for compiler
-CC_FLAGS = -I./include -I./lib $(shell $(WX_CFG_PATH) --cxxflags) -g -c -Wall
-LD_FLAGS = -I./include -I./lib $(shell $(WX_CFG_PATH) --cxxflags --libs)  -lssl -lcrypto
+CC_FLAGS = -std=c++17 -I./include -I./lib -DASIO_STANDALONE $(shell $(WX_CFG_PATH) --cxxflags) -g -c -Wall
+LD_FLAGS = $(shell $(WX_CFG_PATH) --libs) -lcrypto -lssl
 
 # Command used at clean target
 RM = rm -rf

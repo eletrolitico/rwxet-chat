@@ -6,7 +6,7 @@
 #endif
 
 #include "ui/frame.h"
-#include "net/ctrl.h"
+#include "ctrl/cfg.h"
 
 class MyApp : public wxApp
 {
@@ -18,7 +18,8 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-    if(!rwxet_net::check_user_cfg()){
+    std::cout << sizeof(void*) << std::endl;
+    if(!rwxet_ctrl::Cfg::Get()->Init()){
         return false;
     }
 

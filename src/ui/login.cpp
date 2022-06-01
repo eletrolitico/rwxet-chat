@@ -48,17 +48,21 @@ namespace rwxet_ui
         SetSizerAndFit(boxSizer);
     }
 
-    void Login::OnLogin(wxCommandEvent &evt){
+    void Login::OnLogin(wxCommandEvent &evt)
+    {
         std::string server = m_server->GetValue().ToStdString();
         std::string user = m_username->GetValue().ToStdString();
         std::string pass = m_password->GetValue().ToStdString();
 
-        try{
+        try
+        {
             std::string resp = rwxet_net::login(server, user, pass);
-            std::cout << "Resposta: "<< resp << std::endl;
-        }catch(const std::exception& e){
-            std::cout << "Exception: " << e.what() << std::endl;
+            if(resp.size() > 0)
+                wxMessageBox(resp, "Falha no login", wxOK | wxICON_EXCLAMATION);
+        }
+        catch(const std::exception& e)
+        {
+            wxMessageBox(e.what(), "Exception", wxOK | wxICON_ERROR);
         }
     }
-
 }
