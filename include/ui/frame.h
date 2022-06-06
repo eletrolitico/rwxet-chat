@@ -2,7 +2,9 @@
 #define UI_FRAME_H
 
 #include <wx/wx.h>
+
 #include "ui/login.h"
+#include "ui/main.h"
 
 namespace rwxet_ui
 {
@@ -18,6 +20,7 @@ namespace rwxet_ui
         wxDECLARE_EVENT_TABLE();
 
         Login *login;
+        Main *main;
     };
 
     enum

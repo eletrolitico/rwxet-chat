@@ -15,15 +15,15 @@
 
 namespace rwxet_ctrl
 {
-    Cfg* Cfg::instance = nullptr;
+    Cfg* Cfg::s_instance = nullptr;
 
     Cfg::Cfg() {}
 
     Cfg* Cfg::Get()
     {
-        if(instance == nullptr)
-            instance = new Cfg;
-        return instance;
+        if(s_instance == nullptr)
+            s_instance = new Cfg;
+        return s_instance;
     }
 
     bool Cfg::Init()
@@ -45,7 +45,12 @@ namespace rwxet_ctrl
 
         if(!fs::exists(m_cfg_dir))
         {
-            fs::create_directory(m_cfg_dir);
+            if(!fs::create_directory(m_cfg_dir))
+            {
+                std::cerr << "Error creating " << m_cfg_dir << std::endl;
+                return false;
+            }
+
             std::cout << "Created cfg dir " << m_cfg_dir << std::endl;
         }
 
@@ -64,25 +69,29 @@ namespace rwxet_ctrl
     std::string Cfg::ParseAuth(const std::string& apiJson)
     {
         js::Document resp;
-        resp.Parse(apiJson.c_str());
+        if (resp.Parse(apiJson.c_str()).HasParseError())
+            return "Erro parse json api: cod " + std::to_string(resp.GetParseError());
+
         assert(resp.HasMember("status"));
 
-        auto st = resp["status"].GetString();
-        if(st == nullptr){
+        auto st = std::string(resp["status"].GetString());
+        if(st.size() == 0)
             return "Could not obtain response status";
-        }
 
-        if(strcmp(st, "error") == 0){
-            char msg[500];
-            strcpy(msg,"API Error: ");
-            return strncat(msg, resp["message"].GetString(), 450);
-        }
+        if(st == "error")
+            return "API Error: " + std::string(resp["message"].GetString());
 
-        if(strcmp(st, "success") != 0){
-            char msg[500];
-            strcpy(msg,"Unknown API reponse: ");
-            return strncat(msg, st, 450);
-        }
+        if(st != "success")
+            return "Unknown API reponse: " + st;
 
+        auto p_auth = m_cfg_dir/fs::path("auth.json");
+        std::ofstream out(p_auth);
+        out << apiJson;
+
+        return "";
+    }
+
+    void Cfg::Save()
+    {
     }
 } // namespace rwxet_net

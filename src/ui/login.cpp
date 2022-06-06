@@ -6,6 +6,7 @@ namespace rwxet_ui
 {
     wxBEGIN_EVENT_TABLE(Login, wxPanel)
         EVT_BUTTON(ID_LoginBtn, Login::OnLogin)
+        EVT_TEXT_ENTER(wxID_ANY, Login::OnLogin)
     wxEND_EVENT_TABLE()
 
     Login::Login(wxWindow *parent):wxPanel(parent)
@@ -16,16 +17,16 @@ namespace rwxet_ui
 
         wxBoxSizer *boxSizer = new wxBoxSizer(wxVERTICAL);
 
-        wxStaticText *txt = new wxStaticText(this, wxID_ANY, wxString::FromUTF8("Digite as informações para fazer login"));
+        wxStaticText *txt = new wxStaticText(this, wxID_ANY, wxT("Digite as informações para fazer login"));
         m_server   = new wxTextCtrl(this, wxID_ANY, "rocket-chat.alpha.com.vc", wxDefaultPosition, inputSize);
         m_username = new wxTextCtrl(this, wxID_ANY, "",                         wxDefaultPosition, inputSize);
         m_password = new wxTextCtrl(this, wxID_ANY, "",                         wxDefaultPosition, inputSize, wxTE_PASSWORD);
 
-        wxStaticText *serverLabel = new wxStaticText(this, wxID_ANY, "Servidor", wxDefaultPosition, wxSize(width,20));
-        wxStaticText *userLabel   = new wxStaticText(this, wxID_ANY, wxString::FromUTF8("Usuário"), wxDefaultPosition, wxSize(width,20));
-        wxStaticText *passLabel   = new wxStaticText(this, wxID_ANY, "Senha", wxDefaultPosition, wxSize(width,20));
+        wxStaticText *serverLabel = new wxStaticText(this, wxID_ANY, wxT("Servidor"), wxDefaultPosition, wxSize(width,-1));
+        wxStaticText *userLabel   = new wxStaticText(this, wxID_ANY, wxT("Usuário"), wxDefaultPosition, wxSize(width,-1));
+        wxStaticText *passLabel   = new wxStaticText(this, wxID_ANY, wxT("Senha"), wxDefaultPosition, wxSize(width,-1));
 
-        wxButton *btn = new wxButton(this, ID_LoginBtn, "Login");
+        wxButton *btn = new wxButton(this, ID_LoginBtn, wxT("Login"));
 
         boxSizer->AddStretchSpacer();
         boxSizer->Add(txt,        0, wxCENTER);
@@ -46,6 +47,8 @@ namespace rwxet_ui
         boxSizer->AddStretchSpacer();
 
         SetSizerAndFit(boxSizer);
+
+        m_username->SetFocus();
     }
 
     void Login::OnLogin(wxCommandEvent &evt)
@@ -57,8 +60,9 @@ namespace rwxet_ui
         try
         {
             std::string resp = rwxet_net::login(server, user, pass);
-            if(resp.size() > 0)
-                wxMessageBox(resp, "Falha no login", wxOK | wxICON_EXCLAMATION);
+            size_t sz = resp.size();
+            if(sz > 1)
+                wxMessageBox(resp, "Falha no login", wxOK | wxICON_ERROR);
         }
         catch(const std::exception& e)
         {

@@ -14,13 +14,15 @@ namespace rwxet_ctrl
             static Cfg* Get();
             bool Init();
             std::string ParseAuth(const std::string&);
+            void Save();
 
         private:
-            static Cfg* instance;
+            static Cfg* s_instance;
             Cfg();
 
             fs::path m_cfg_dir;
             js::Document m_document;
+
     };
 
     constexpr std::string_view AUTH_TOKEN = "authToken";
