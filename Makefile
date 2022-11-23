@@ -13,8 +13,8 @@ DIRS=$(dir $(OBJ))
 CC=$(shell $(WX_CFG_PATH) --cxx)
 
 # Flags for compiler
-CC_FLAGS += -std=c++17 -I./include -I./lib -DASIO_STANDALONE $(shell $(WX_CFG_PATH) --cxxflags) -g -c -Wall
-LD_FLAGS += $(shell $(WX_CFG_PATH) --libs) -lcrypto -lssl
+CC_FLAGS += -std=c++17 -I./include -I./lib $(shell $(WX_CFG_PATH) --cxxflags) -g -c -Wall
+LD_FLAGS += $(shell $(WX_CFG_PATH) --libs) -lPocoFoundation -lPocoNet  -lPocoNetSSL
 
 # Command used at clean target
 RM = rm -rf

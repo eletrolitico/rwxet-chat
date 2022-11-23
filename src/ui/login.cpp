@@ -18,7 +18,7 @@ namespace rwxet_ui
         wxBoxSizer *boxSizer = new wxBoxSizer(wxVERTICAL);
 
         wxStaticText *txt = new wxStaticText(this, wxID_ANY, wxT("Digite as informações para fazer login"));
-        m_server   = new wxTextCtrl(this, wxID_ANY, "rocket-chat.alpha.com.vc", wxDefaultPosition, inputSize);
+        m_server   = new wxTextCtrl(this, wxID_ANY, "https://rocket-chat.alpha.com.vc", wxDefaultPosition, inputSize);
         m_username = new wxTextCtrl(this, wxID_ANY, "",                         wxDefaultPosition, inputSize);
         m_password = new wxTextCtrl(this, wxID_ANY, "",                         wxDefaultPosition, inputSize, wxTE_PASSWORD);
 
