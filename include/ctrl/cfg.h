@@ -2,31 +2,44 @@
 #define CTRL_CFG_H
 
 #include <filesystem>
-#include <rapidjson/document.h>
 
 namespace fs = std::filesystem;
-namespace js = rapidjson;
 
 namespace rwxet_ctrl
 {
-    class Cfg{
-        public:
-            static Cfg* Get();
-            bool Init();
-            std::string ParseAuth(const std::string&);
-            void Save();
+    typedef struct
+    {
+        std::string name;
+        std::string user_id;
+        std::string auth_token;
+        std::string pfp_link;
+        std::string base_url;
+    } cfg_data;
+    class Cfg
+    {
+    public:
+        static Cfg *Get();
+        bool Init();
+        bool ParseAuth(const std::string &, const std::string & = "");
+        void Save();
 
-        private:
-            static Cfg* s_instance;
-            Cfg();
+        inline bool HasConfig()
+        {
+            return has_config;
+        }
+        inline const cfg_data &GetConfig()
+        {
+            return data;
+        }
 
-            fs::path m_cfg_dir;
-            js::Document m_document;
+    private:
+        static Cfg *s_instance;
+        Cfg();
 
+        fs::path m_cfg_dir;
+        bool has_config{false};
+        cfg_data data;
     };
-
-    constexpr std::string_view AUTH_TOKEN = "authToken";
-    constexpr std::string_view PFP_LINK   = "pfpLink";
 } // namespace rwxet_ctrl
 
 #endif

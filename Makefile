@@ -14,7 +14,7 @@ CC=$(shell $(WX_CFG_PATH) --cxx)
 
 # Flags for compiler
 CC_FLAGS += -std=c++17 -I./include -I./lib $(shell $(WX_CFG_PATH) --cxxflags) -g -c -Wall
-LD_FLAGS += $(shell $(WX_CFG_PATH) --libs) -lPocoFoundation -lPocoNet  -lPocoNetSSL
+LD_FLAGS += $(shell $(WX_CFG_PATH) --libs) -lPocoFoundation -lPocoNet  -lPocoNetSSL -lPocoJSON
 
 # Command used at clean target
 RM = rm -rf

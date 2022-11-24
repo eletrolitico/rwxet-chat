@@ -1,4 +1,5 @@
 #include "ui/frame.h"
+#include "ctrl/cfg.h"
 
 namespace rwxet_ui
 {
@@ -22,8 +23,14 @@ namespace rwxet_ui
         menuBar->Append(menuFile, "&File");
         menuBar->Append(menuHelp, "&Help");
 
-        login = new Login(this);
-        login->Show(true);
+        auto cfg = rwxet_ctrl::Cfg::Get();
+        if(cfg->HasConfig()){
+            main = new Main(this);
+            main->Show(true);
+        } else {
+            login = new Login(this);
+            login->Show(true);
+        }
 
         SetMenuBar(menuBar);
     }

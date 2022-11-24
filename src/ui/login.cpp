@@ -59,10 +59,8 @@ namespace rwxet_ui
 
         try
         {
-            std::string resp = rwxet_net::login(server, user, pass);
-            size_t sz = resp.size();
-            if(sz > 1)
-                wxMessageBox(resp, "Falha no login", wxOK | wxICON_ERROR);
+            if(!rwxet_net::login(server, user, pass))
+                wxMessageBox("Houve uma falha no login, tentar novamente mais tarde!", "Falha no login", wxOK | wxICON_ERROR);
         }
         catch(const std::exception& e)
         {
