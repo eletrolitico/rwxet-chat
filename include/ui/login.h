@@ -8,17 +8,20 @@ namespace rwxet_ui
     class Login : public wxPanel
     {
     public:
-        Login(wxWindow *parent);
+        explicit Login(wxWindow *parent);
+
     private:
-        wxDECLARE_EVENT_TABLE();
         void OnLogin(wxCommandEvent &event);
 
         wxTextCtrl *m_server;
         wxTextCtrl *m_username;
         wxTextCtrl *m_password;
+
+        wxDECLARE_EVENT_TABLE();
     };
 
-    enum {
+    enum
+    {
         ID_LoginBtn = 100
     };
 }

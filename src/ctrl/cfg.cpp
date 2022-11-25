@@ -1,5 +1,6 @@
 #include "ctrl/cfg.h"
 
+#include <wx/wx.h>
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -19,7 +20,7 @@ namespace rwxet_ctrl
 {
     Cfg *Cfg::s_instance = nullptr;
 
-    Cfg::Cfg() {}
+    Cfg::Cfg() = default;
 
     Cfg *Cfg::Get()
     {
@@ -52,16 +53,12 @@ namespace rwxet_ctrl
             return false;
         }
 
-        auto p_cfg = m_cfg_dir / fs::path("config.json");
-        if (fs::exists(p_cfg))
+        if (auto p_cfg = m_cfg_dir / fs::path("config.json"); fs::exists(p_cfg))
         {
             std::ifstream t(p_cfg);
             std::stringstream buffer;
             buffer << t.rdbuf();
-            if (!ParseAuth(buffer.str()))
-            {
-                return false;
-            }
+            ParseAuth(buffer.str());
         }
 
         return true;
@@ -72,34 +69,43 @@ namespace rwxet_ctrl
         JS::Parser parser;
         auto result = parser.parse(apiJson);
         if (result.isEmpty())
+            // yeet
+            throw AuthException("this bitch empty");
+
+        auto obj = result.extract<JS::Object::Ptr>();
+
+        if (obj->get("status").extract<std::string>() != "success")
         {
-            std::cerr << "parse config empty" << std::endl;
+            auto msg = obj->get("error").extract<std::string>();
+            if (msg.find("totp") == std::string::npos)
+                throw AuthException(msg);
+
             return false;
         }
-        auto obj = result.extract<JS::Object::Ptr>();
+
         auto data = obj->get("data").extract<JS::Object::Ptr>();
-        this->data.auth_token = data->get("authToken").extract<std::string>();
-        this->data.user_id = data->get("authToken").extract<std::string>();
+        m_data.auth_token = data->get("authToken").extract<std::string>();
+        m_data.user_id = data->get("userId").extract<std::string>();
 
         auto me = data->get("me").extract<JS::Object::Ptr>();
-        this->data.name = me->get("name").extract<std::string>();
-        this->data.pfp_link = me->get("avatarUrl").extract<std::string>();
+        m_data.name = me->get("name").extract<std::string>();
+        m_data.pfp_link = me->get("avatarUrl").extract<std::string>();
         if (base_url.empty())
-            this->data.base_url = obj->get("baseUrl").extract<std::string>();
+            m_data.base_url = obj->get("baseUrl").extract<std::string>();
         else
         {
-            this->data.base_url = base_url;
+            m_data.base_url = base_url;
             obj->set("baseUrl", base_url);
             auto p_cfg = m_cfg_dir / fs::path("config.json");
             std::ofstream f(p_cfg);
-            obj->stringify(f,1);
+            obj->stringify(f, 1);
         }
 
-        has_config = true;
+        m_has_config = true;
         return true;
     }
 
     void Cfg::Save()
     {
     }
-} // namespace rwxet_net
+}

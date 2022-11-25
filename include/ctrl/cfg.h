@@ -7,6 +7,20 @@ namespace fs = std::filesystem;
 
 namespace rwxet_ctrl
 {
+    class AuthException : public std::exception
+    {
+    public:
+        AuthException(const std::string &why) : reason(why)
+        {
+        }
+        const char *what() const throw() override
+        {
+            return reason.c_str();
+        }
+
+    private:
+        std::string reason;
+    };
     typedef struct
     {
         std::string name;
@@ -25,11 +39,19 @@ namespace rwxet_ctrl
 
         inline bool HasConfig()
         {
-            return has_config;
+            return m_has_config;
         }
         inline const cfg_data &GetConfig()
         {
-            return data;
+            return m_data;
+        }
+        inline void set2FAToken(const std::string &token)
+        {
+            m_2fa_token = token;
+        }
+        inline std::string get2FAToken()
+        {
+            return m_2fa_token;
         }
 
     private:
@@ -37,8 +59,9 @@ namespace rwxet_ctrl
         Cfg();
 
         fs::path m_cfg_dir;
-        bool has_config{false};
-        cfg_data data;
+        bool m_has_config{false};
+        cfg_data m_data;
+        std::string m_2fa_token;
     };
 } // namespace rwxet_ctrl
 

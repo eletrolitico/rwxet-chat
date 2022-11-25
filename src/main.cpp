@@ -9,17 +9,17 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    bool OnInit() override;
 };
 
 wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-    if(!rwxet_ctrl::Cfg::Get()->Init())
+    if (!rwxet_ctrl::Cfg::Get()->Init())
         return false;
 
-    rwxet_ui::Frame *frame = new rwxet_ui::Frame;
+    auto *frame = new rwxet_ui::Frame;
     frame->Show(true);
     return true;
 }

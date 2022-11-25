@@ -8,7 +8,7 @@ namespace rwxet_ui
     class Main : public wxPanel
     {
     public:
-        Main(wxWindow *parent);
+        explicit Main(wxWindow *parent);
 
     private:
         wxDECLARE_EVENT_TABLE();
